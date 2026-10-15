@@ -2,8 +2,8 @@
 
 > **SAMPLE / WORK IN PROGRESS:** This repository is a starter for **P7 — Steane Quantum Error Correction**. The demonstration currently uses classical binary syndrome algebra only. It is **not** an implementation of encoded quantum circuits, ancilla-based syndrome measurements, or logical gates. Replace example content with your team's actual work before submitting.
 
-**Team:** [YOUR TEAM NAME]  
-**Members:** [MEMBER 1], [MEMBER 2], [MEMBER 3]  
+**Team:** Ouroboros  
+**Members:** Amritup Vats, Krish Majhi, Saumya Baskar, Amritash Mishra  
 **Track / Problem:** P7 — Steane Quantum Error Correction  
 **Python version:** 3.10+ (sample implementation uses only Python standard library)
 
