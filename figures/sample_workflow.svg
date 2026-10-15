@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="245" viewBox="0 0 1000 245">
+  <rect width="1000" height="245" fill="#f8fafc"/>
+  <text x="30" y="38" font-family="Arial" font-size="22" font-weight="bold" fill="#0f172a">Sample: algebraic syndrome demonstration (not circuit results)</text>
+  <g font-family="Arial" font-size="16" fill="#0f172a" text-anchor="middle">
+    <rect x="30" y="80" width="206" height="82" rx="12" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="133" y="112">Choose X / Y / Z</text><text x="133" y="136">at one of 7 positions</text>
+    <rect x="274" y="80" width="205" height="82" rx="12" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="377" y="112">Compute X/Z</text><text x="377" y="136">binary syndromes</text>
+    <rect x="517" y="80" width="204" height="82" rx="12" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="619" y="112">Look up assumed</text><text x="619" y="136">single error</text>
+    <rect x="760" y="80" width="212" height="82" rx="12" fill="#dcfce7" stroke="#16a34a"/>
+    <text x="866" y="112">Compare error labels</text><text x="866" y="136">21 / 21 checks</text>
+  </g>
+  <g stroke="#334155" stroke-width="3" fill="none"><path d="M236 121h34m-9 -7 9 7 -9 7"/><path d="M479 121h34m-9 -7 9 7 -9 7"/><path d="M721 121h35m-9 -7 9 7 -9 7"/></g>
+  <text x="30" y="208" font-family="Arial" font-size="15" fill="#475569">No Qiskit encoder, ancilla extraction, noise, state fidelity or logical gates have been implemented in this starter.</text>
+</svg>
