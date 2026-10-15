@@ -1,0 +1,5 @@
+# SAMPLE ONLY: no third-party dependencies needed for the algebra demonstration.
+# When Qiskit or plotting dependencies are added, pin exact tested versions here:
+# qiskit==<tested-version>
+# qiskit-aer==<tested-version>
+# matplotlib==<tested-version>
