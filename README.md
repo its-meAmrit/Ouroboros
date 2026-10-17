@@ -61,4 +61,4 @@ Syndrome extraction uses one bare ancilla per stabiliser and is not fault tolera
 
 ## Credits
 
-Qiskit 2.6.0 and Qiskit Aer 0.17.2; A. M. Steane, "Error correcting codes in quantum theory", PRL 77, 793 (1996); Nielsen & Chuang, ch. 10; code written with Claude (Anthropic), see `AI_USE_NOTE.md`.
+Qiskit 2.6.0 and Qiskit Aer 0.17.2; Understanding Quantum Information & Computation With John Watrous | Youtube; A. M. Steane, "Error correcting codes in quantum theory", PRL 77, 793 (1996); Nielsen & Chuang, ch. 10; code written with Claude (Anthropic), see `AI_USE_NOTE.md`.
