@@ -1,73 +1,65 @@
-# Steane [[7,1,3]] Quantum Error Correction — Sample Submission
+# A logical qubit with the Steane code (Qiskit)
 
-> **SAMPLE / WORK IN PROGRESS:** This repository is a starter for **P7 — Steane Quantum Error Correction**. The demonstration currently uses classical binary syndrome algebra only. It is **not** an implementation of encoded quantum circuits, ancilla-based syndrome measurements, or logical gates. Replace example content with your team's actual work before submitting.
-
-**Team:** Ouroboros  
-**Members:** Amritup Vats, Krish Majhi, Saumya Baskar, Amritash Mishra  
-**Track / Problem:** P7 — Steane Quantum Error Correction  
-**Python version:** 3.10+ (sample implementation uses only Python standard library)
+**Team:** Ouroboros
+**Members:** Amritup Vats, Saumya Baskar, Amritash Mishra, Krish Majhi
+**Track / Problem:** Track 4, Problem 7: A logical qubit with the Steane code (core tasks 1-4 plus three stretch goals)
+**Python version:** 3.12.3
 
 ## Summary
 
-The Steane [[7,1,3]] code encodes one logical qubit into seven physical qubits and can correct an arbitrary single-qubit Pauli error. Our planned project will build the encoder, extract X- and Z-type stabilizer syndromes with ancillas, apply Pauli corrections, and demonstrate a transversal logical gate in Qiskit. **Currently included:** a minimal algebra-only syndrome lookup example for X, Y, Z errors on seven sites.
+We build the [[7,1,3]] Steane code from scratch in Qiskit: encoder, six-stabiliser syndrome extraction with ancillas, a lookup-table decoder run *inside* the circuit with mid-circuit measurement and `if_test` feed-forward, and transversal logical gates (X, Z, H, S†, and CNOT between two blocks). All 21 single-qubit Pauli errors are detected and corrected with fidelity 1 on five test states; two-error behaviour is measured exactly (147 of the 189 weight-2 Pauli errors cause a logical error). Logical vs physical error rate is computed **exactly** by enumerating all 4^7 Pauli errors (code-capacity break-even at p* = 0.081, leading term 16.3 p²) and cross-checked with Aer circuit simulation. With circuit-level noise and our *non-fault-tolerant* circuits the encoded qubit is **worse** than a bare qubit at every noise level tested; we report this as a result, not a bug.
 
-## Main result (sample only)
+## Main result
 
-![Diagram of the sample check, not experimental data](figures/sample_workflow.svg)
+![Main result](figures/main_result.png)
 
-The example runs 21 algebraic checks: 7 positions × {X, Y, Z}. Each check uses a binary parity-check matrix, decodes the predicted syndrome, and verifies the error label. **These are not quantum state-fidelity results or error-correction circuit measurements.**
+(a) Exact logical error probability of the Steane code under depolarising noise against the unencoded qubit (dashed black), break-even at p* ≈ 0.081; red points are Aer circuit simulations on the matching one-basis curve. (b) With every gate and measurement noisy, our non-fault-tolerant circuits do not beat a bare physical qubit.
 
-## Reproduce the sample
+## How to reproduce (clean start)
 
 ```bash
 python -m venv .venv
-# macOS/Linux: source .venv/bin/activate
-# Windows PowerShell: .venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-python -m unittest discover -s tests -v
-python -m src.main
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+pytest -q tests                    # 7 checks against exact references, ~20 s
+python src/main.py                 # all numbers and figures, ~3 min  (use --quick for ~1 min)
+python src/check_noise_model.py    # optional 1M-shot check of the Aer noise convention, ~1 min
+python src/build_writeup.py        # regenerates WRITEUP.pdf from results.json
 ```
 
-No IBM Quantum account or hardware access is needed for the starter example. Expected runtime: under a few seconds. No random seeds, statistical sampling, or shots are used.
-
-Expected demo summary: `21/21 algebraic single-qubit Pauli checks passed`.
-
-## Planned quantum implementation — not yet present
-
-- [ ] Construct and verify an encoded logical state with seven physical qubits
-- [ ] Implement the six Steane stabilizers and ancilla-based syndrome extraction
-- [ ] Inject all 21 single-qubit X/Y/Z errors into a quantum circuit and correct them
-- [ ] Check recovered logical information or state fidelity
-- [ ] Implement and test at least one transversal logical gate (e.g. logical H)
-- [ ] Investigate two-qubit errors and/or physical-versus-logical error-rate curves
-- [ ] Produce measured or simulated results and comparison figure
+- Expected runtime: about 3 minutes for `main.py` on a laptop (Aer stabiliser simulator)
+- Random seed(s) used: 42 (Aer `seed_simulator`), 7 (test-state generator)
+- Output: the main figure is written to `figures/main_result.png`; all numbers go to `results.json`
+- Needs an IBM Quantum account? No. Everything runs on the local Aer simulator.
 
 ## Repository contents
 
-| Path | Description |
-| --- | --- |
-| `src/main.py` | Runs the **algebra-only** demonstration |
-| `src/steane_syndrome.py` | Binary Hamming parity-check matrix and lookup decoder |
-| `tests/test_steane_syndrome.py` | Deterministic tests for the algebraic example |
-| `figures/sample_workflow.svg` | Illustrative workflow diagram (**not data**) |
-| `WRITEUP_TEMPLATE.md` | Starting outline for the required 2–4 page PDF |
-| `AI_USE_NOTE.md` | AI disclosure placeholder to fill honestly |
-| `SUBMISSION_CHECKLIST.md` | Organizers' checklist, annotated by status |
-| `requirements.txt` | No external dependencies for this preliminary example |
+| Path | What it is |
+|------|------------|
+| `WRITEUP.pdf` | Write-up (2-4 pages): Problem, Method, Results, Honest limits |
+| `AI_USE_NOTE.md` | Tools used, one thing the AI got wrong, how we caught it |
+| `DEMO_GUIDE.md` | 5-minute demo script and answers to likely questions |
+| `src/steane.py` | The code itself: stabilisers, encoder, syndrome extraction, lookup, exact enumeration |
+| `src/experiments.py` | Circuits: 21-error test, transversal gates, noisy memory experiments |
+| `src/main.py` | Runs everything and writes figures and `results.json` |
+| `tests/` | Checks against exact references (pytest) |
+| `figures/` | All figures used in the write-up |
+| `requirements.txt` | Pinned package versions |
 
-## What is simulated / verified
+## What is simulated
 
-Only **classical symplectic error-label/syndrome arithmetic** is executed: X and Z error components are bit masks; parity checks and correction lookup are computed mathematically. No quantum states, Qiskit circuits, physical noise, stabilizer measurement devices, or IBM hardware are simulated by this starter.
+- **Single-error table, transversal gates, Bell-pair check:** noiseless physical circuit simulation (Aer statevector, or exact linear algebra for the gate checks). Corrections run in-circuit with `if_test`.
+- **Code-capacity curve (a):** the solid line is an **exact enumeration** of all 4^7 Pauli errors (a statistical-free calculation, not a circuit simulation); red points are Aer stabiliser-circuit simulations with noise only on the data qubits.
+- **Circuit-level curves (b):** Aer stabiliser simulation with depolarising noise after every gate and readout flips. The per-round corrections are applied **in classical post-processing** (a Pauli frame), which is mathematically equivalent to feed-forward for Pauli corrections but is a shortcut compared with `if_test`.
 
-## Honest limits
+## Hardware run (optional bonus)
 
-Passing 21 algebraic checks does **not** prove a working fault-tolerant error-correction circuit. There are no ancillas, measurement outcomes, gate errors, quantum noise models, timing, or logical fidelity measurements. All planned circuit-based claims require later implementation and testing.
+Not done (no IBM Quantum access during the build).
+
+## Honest limits (short version)
+
+Syndrome extraction uses one bare ancilla per stabiliser and is not fault tolerant, so a single faulty gate can corrupt several data qubits; this is why circuit-level logical error does not beat the bare qubit. No flag qubits, no hardware, depolarising noise only. Full discussion in `WRITEUP.pdf`.
 
 ## Credits
 
-- Standard [[7,1,3]] Steane CSS-code construction from the classical [7,4,3] Hamming code.
-- Starter repository scaffold and example prose were prepared with AI assistance; verification and final disclosure remain the team's responsibility.
-
-## Before submitting
-
-Replace placeholders, produce `WRITEUP.pdf` (2–4 pages), replace the illustrative figure with your real results, pin every installed external package after adding dependencies, fill the AI-use note with a **real observed mistake and how you caught it**, and run the organizer's submission checker.
+Qiskit 2.6.0 and Qiskit Aer 0.17.2; A. M. Steane, "Error correcting codes in quantum theory", PRL 77, 793 (1996); Nielsen & Chuang, ch. 10; code written with Claude (Anthropic), see `AI_USE_NOTE.md`.
